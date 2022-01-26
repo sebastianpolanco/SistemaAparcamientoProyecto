@@ -1,5 +1,7 @@
+
 #include <LiquidCrystal.h> 
 
+//LCD 16x2 pines
 LiquidCrystal lcd (7,8,10,11,12,13);
 
 // Pines utilizados
@@ -17,12 +19,10 @@ const float umbral2 = 80.0;
 const float umbral3 = 50.0;
 
 void setup() {
-  lcd.begin (16,2);
   
-  // Iniciamos el monitor serie
-  Serial.begin(9600);
+  // Iniciamos la pantalla lcd
+  lcd.begin (16,2);
 
-  // Modo entrada/salida de los pines
   pinMode(LEDVERDE, OUTPUT);
   pinMode(LEDAMARILLO, OUTPUT);
   pinMode(LEDROJO, OUTPUT);
@@ -30,7 +30,6 @@ void setup() {
   pinMode(TRIGGER, OUTPUT);
   pinMode(BUZZER, OUTPUT);
 
-  // Apagamos todos los LEDs
   apagarLEDs();
 
 }
@@ -47,10 +46,9 @@ void loop() {
   // Apagamos todos los LEDs
   apagarLEDs();
 
-  // Lanzamos alerta si estamos dentro del rango de peligro
+  //  si estamos dentro del rango de peligro
   if (distancia < umbral1)
   {
-    // Lanzamos alertas
     alertas(distancia);
   }
 
@@ -59,13 +57,15 @@ void loop() {
 // Apaga todos los LEDs
 void apagarLEDs()
 {
-  // Apagamos todos los LEDs
   digitalWrite(LEDVERDE, LOW);
   digitalWrite(LEDAMARILLO, LOW);
   digitalWrite(LEDROJO, LOW);
 }
 
-// Función que comprueba si hay que lanzar alguna alerta visual o sonora
+//******************* Funciones ******************************** 
+
+//comprueba si hay que lanzar alguna alerta visual o sonora
+
 void alertas(float distancia)
 {
   if (distancia < umbral1 && distancia >= umbral2)
@@ -90,6 +90,7 @@ void alertas(float distancia)
 
 // Método que calcula la distancia a la que se encuentra un objeto.
 // Devuelve una variable tipo float que contiene la distancia
+
 float calcularDistancia()
 {
   // La función pulseIn obtiene el tiempo que tarda en cambiar entre estados, en este caso a HIGH
@@ -99,16 +100,13 @@ float calcularDistancia()
   // por eso se multiplica por 0.000001
   float distancia = tiempo * 0.000001 * sonido / 2.0;
 
-
+  //imprime en el LCD 
   lcd.setCursor (0,0);
   lcd.print("obstaculo a:");
   lcd.setCursor (0,1);
   lcd.print(distancia );
   lcd.print("cm");
   lcd.println();
-
-
-
 
   return distancia;
 }
